@@ -1,8 +1,15 @@
-/node_modules
-/.next/
-/out/
+# dependencies
+node_modules/
+
+# build output
+.next/
+out/
+
+# env
 .env
 .env*.local
+
+# misc
 .DS_Store
 *.pem
 npm-debug.log*
