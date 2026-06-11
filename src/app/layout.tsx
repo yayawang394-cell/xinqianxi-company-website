@@ -18,11 +18,11 @@ export const metadata: Metadata = {
     default: "杭州萧山新千西人工智能应用软件有限公司",
     template: "%s · 杭州萧山新千西人工智能应用软件有限公司",
   },
-  description: "人工智能应用开发、软件技术服务与数字化解决方案提供商。",
-  keywords: ["新千西", "人工智能", "AI应用开发", "软件开发", "数字化解决方案", "杭州萧山"],
+  description: "AI应用开发、智能体、数字员工与自动化系统，让AI真正服务企业增长。",
+  keywords: ["新千西", "人工智能", "AI智能体", "数字员工", "AI自动化", "杭州萧山"],
   openGraph: {
     title: "杭州萧山新千西人工智能应用软件有限公司",
-    description: "人工智能应用开发、软件技术服务与数字化解决方案提供商。",
+    description: "AI应用开发、智能体、数字员工与自动化系统，让AI真正服务企业增长。",
     url: siteUrl,
     siteName: "杭州萧山新千西人工智能应用软件有限公司",
     locale: "zh_CN",
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#050a12",
+  themeColor: "#020817",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
