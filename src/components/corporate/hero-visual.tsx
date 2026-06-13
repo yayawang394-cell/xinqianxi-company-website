@@ -1,121 +1,168 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 
-const MODULES = [
-  { title: "智能体系统", sub: "AGENT SYSTEM", pos: "left-[6%] top-[14%]", delay: "0s" },
-  { title: "数字员工", sub: "DIGITAL EMPLOYEE", pos: "right-[4%] top-[16%]", delay: "0.5s" },
-  { title: "知识库管理", sub: "KNOWLEDGE BASE", pos: "left-[5%] bottom-[22%]", delay: "1s" },
-  { title: "自动化流程", sub: "AUTOMATION", pos: "right-[5%] bottom-[20%]", delay: "1.5s" },
+const ENGINE_MODULES = [
+  { id: "story", label: "Story Generation", sub: "叙事生成", value: "847", unit: "/h", color: "#A78BFA" },
+  { id: "character", label: "Character Creation", sub: "角色创建", value: "128", unit: "active", color: "#818CF8" },
+  { id: "world", label: "World Building", sub: "世界构建", value: "24", unit: "universes", color: "#38BDF8" },
+  { id: "knowledge", label: "Knowledge Network", sub: "知识网络", value: "12.8k", unit: "nodes", color: "#34D399" },
+  { id: "asset", label: "Asset Registry", sub: "资产注册", value: "4.2k", unit: "records", color: "#F472B6" },
+  { id: "video", label: "Video Pipeline", sub: "视频流水线", value: "Live", unit: "rendering", color: "#26E5FF" },
 ] as const;
 
-const STATUS = [
-  { label: "DATA SYNC", sub: "实时数据同步" },
-  { label: "MODEL RUNNING", sub: "模型运行中" },
-  { label: "TASK AUTOMATION", sub: "任务自动化中" },
+const STREAM = [
+  { module: "story", msg: "Chapter arc generated · branch-03" },
+  { module: "character", msg: "Character profile synthesized · ID-4821" },
+  { module: "world", msg: "Universe lore layer expanded" },
+  { module: "knowledge", msg: "Context graph updated · +64 nodes" },
+  { module: "asset", msg: "IP metadata registered · universe-03" },
+  { module: "video", msg: "Comic drama render queued · ep.07" },
+  { module: "story", msg: "Multi-line narrative merged" },
+  { module: "asset", msg: "Creator rights layer synced" },
 ] as const;
 
-function ModuleIcon({ type }: { type: number }) {
-  const colors = ["#6366F1", "#38BDF8", "#34D399", "#F472B6"];
+function PulseDot({ color }: { color: string }) {
   return (
-    <div
-      className="mb-2 flex h-8 w-8 items-center justify-center rounded-lg"
-      style={{ background: `${colors[type]}22`, border: `1px solid ${colors[type]}44` }}
-    >
-      <div className="h-3 w-3 rounded-sm" style={{ background: colors[type] }} />
-    </div>
+    <span className="relative flex h-1.5 w-1.5 shrink-0">
+      <span className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-50" style={{ background: color }} />
+      <span className="relative inline-flex h-1.5 w-1.5 rounded-full" style={{ background: color }} />
+    </span>
   );
 }
 
 export function HeroVisual() {
   const reduce = useReducedMotion();
+  const [tick, setTick] = useState(0);
+  const [active, setActive] = useState(0);
+
+  useEffect(() => {
+    if (reduce) return;
+    const id = setInterval(() => {
+      setTick((t) => t + 1);
+      setActive((a) => (a + 1) % ENGINE_MODULES.length);
+    }, 2400);
+    return () => clearInterval(id);
+  }, [reduce]);
+
+  const stream = [...STREAM, ...STREAM];
+  const current = ENGINE_MODULES[active];
 
   return (
-    <div className="relative w-full max-w-[560px]">
-      <div className="console-panel overflow-hidden rounded-[24px] p-5 md:p-6">
-        <div className="mb-5 flex items-center justify-between">
-          <p className="text-[11px] font-semibold tracking-[0.14em] text-white/50">AI SYSTEM CONSOLE</p>
-          <span className="flex items-center gap-2 text-[10px] font-medium text-emerald-400">
-            <span className={`h-1.5 w-1.5 rounded-full bg-emerald-400 ${reduce ? "" : "animate-pulse"}`} />
-            SYSTEM ONLINE
-          </span>
+    <div className="relative w-full max-w-[580px]">
+      <div
+        className="pointer-events-none absolute -inset-8 rounded-[36px] opacity-55"
+        style={{
+          background:
+            "radial-gradient(ellipse at 30% 40%, rgba(167,139,250,0.16), transparent 55%), radial-gradient(ellipse at 70% 60%, rgba(38,229,255,0.1), transparent 50%)",
+          filter: "blur(48px)",
+          animation: reduce ? undefined : "glow-pulse 6s ease-in-out infinite",
+        }}
+        aria-hidden
+      />
+
+      <div className="os-dashboard data-center-glow relative overflow-hidden rounded-[20px]">
+        <div className="flex items-start justify-between gap-4 border-b border-white/[0.06] px-5 py-4 md:px-6">
+          <div>
+            <p className="text-[10px] font-semibold tracking-[0.16em] text-white/40">AI CONTENT ENGINE</p>
+            <p className="mt-1 text-sm font-semibold text-white">Content Creation Runtime</p>
+          </div>
+          <div className="flex items-center gap-2 rounded-full border border-violet-400/20 bg-violet-400/[0.06] px-3 py-1.5">
+            {!reduce && <PulseDot color="#A78BFA" />}
+            <span className="text-[10px] font-medium text-violet-300/90">Running</span>
+          </div>
         </div>
 
-        <div className="relative mx-auto aspect-square max-h-[340px] w-full">
-          {/* Energy rings */}
+        {/* Active module highlight */}
+        <div
+          className="border-b border-white/[0.06] px-5 py-4 transition-all duration-500 md:px-6"
+          style={{ background: `${current.color}08` }}
+        >
+          <p className="text-[9px] font-medium tracking-wider text-white/35">ACTIVE MODULE</p>
+          <p className="mt-1 font-display text-lg font-bold text-white">{current.label}</p>
+          <p className="text-[11px] text-white/45">{current.sub}</p>
           {!reduce && (
-            <>
+            <div className="mt-3 h-0.5 overflow-hidden rounded-full bg-white/[0.06]">
               <div
-                className="pointer-events-none absolute left-1/2 top-[46%] h-[220px] w-[220px] rounded-full border border-cyan-400/20"
-                style={{ animation: "ring-rotate 20s linear infinite" }}
-              />
-              <div
-                className="pointer-events-none absolute left-1/2 top-[46%] h-[180px] w-[180px] rounded-full border border-blue-400/15"
-                style={{ animation: "ring-rotate-reverse 15s linear infinite" }}
-              />
-              <div
-                className="pointer-events-none absolute left-1/2 top-[46%] h-[260px] w-[260px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-40"
+                className="engine-flow h-full rounded-full"
                 style={{
-                  background: "radial-gradient(circle, rgba(38,229,255,0.12) 0%, transparent 70%)",
-                  animation: "glow-pulse 4s ease-in-out infinite",
+                  background: `linear-gradient(90deg, ${current.color}44, ${current.color}, ${current.color}44)`,
+                  backgroundSize: "200% 100%",
+                  animation: "data-shimmer 2s linear infinite",
                 }}
               />
-            </>
-          )}
-
-          {/* AI CORE cube */}
-          <div
-            className={`absolute left-1/2 top-[46%] z-20 ${reduce ? "-translate-x-1/2 -translate-y-1/2" : "core-float"}`}
-            style={reduce ? undefined : { animation: "core-float 5s ease-in-out infinite, core-pulse 3s ease-in-out infinite" }}
-          >
-            <div
-              className="relative flex h-[88px] w-[88px] items-center justify-center md:h-[100px] md:w-[100px]"
-              style={{ transform: "rotateX(12deg) rotateY(-18deg)", transformStyle: "preserve-3d" }}
-            >
-              <div
-                className="absolute inset-0 rounded-2xl"
-                style={{
-                  background: "linear-gradient(135deg, rgba(38,229,255,0.35) 0%, rgba(0,184,255,0.15) 50%, rgba(59,232,212,0.25) 100%)",
-                  border: "1px solid rgba(38,229,255,0.4)",
-                  backdropFilter: "blur(12px)",
-                  boxShadow: "0 0 40px rgba(38,229,255,0.3), inset 0 1px 0 rgba(255,255,255,0.2)",
-                }}
-              />
-              <span className="relative text-[11px] font-bold tracking-wider text-white md:text-xs">AI CORE</span>
             </div>
-          </div>
+          )}
+        </div>
 
-          {/* Floating modules — no lines */}
-          {MODULES.map((m, i) => (
+        {/* 6 engine modules */}
+        <div className="grid grid-cols-2 gap-px bg-white/[0.04] sm:grid-cols-3">
+          {ENGINE_MODULES.map((mod, i) => (
             <div
-              key={m.title}
-              className={`absolute z-10 w-[42%] max-w-[160px] ${m.pos} ${reduce ? "" : "card-float-anim"}`}
-              style={reduce ? undefined : { animation: `card-float 5s ease-in-out infinite ${m.delay}` }}
+              key={mod.id}
+              className="bg-[#060d1a]/90 px-3 py-3 transition-all duration-500 md:px-3.5 md:py-3.5"
+              style={
+                active === i && !reduce
+                  ? { background: `${mod.color}06`, boxShadow: `inset 0 0 0 1px ${mod.color}44` }
+                  : undefined
+              }
             >
-              <div className="glass-dark rounded-xl p-3 md:p-3.5">
-                <ModuleIcon type={i} />
-                <p className="text-[11px] font-semibold leading-tight text-white md:text-xs">{m.title}</p>
-                <p className="mt-0.5 text-[9px] tracking-wider text-white/40">{m.sub}</p>
+              <div className="flex items-center gap-1.5">
+                {!reduce && active === i && <PulseDot color={mod.color} />}
+                <p className="truncate text-[8px] font-medium tracking-wide text-white/40">{mod.label}</p>
               </div>
+              <p className="mt-1 font-display text-sm font-bold tabular-nums text-white">
+                {mod.value}
+                <span className="ml-0.5 text-[9px] font-normal text-white/30">{mod.unit}</span>
+              </p>
             </div>
           ))}
         </div>
 
-        <div className="mt-4 grid gap-2 border-t border-white/8 pt-4 sm:grid-cols-3">
-          {STATUS.map((s, i) => (
-            <div key={s.label} className="rounded-lg bg-white/[0.03] px-3 py-2.5">
-              <p className="text-[9px] font-semibold tracking-wider text-cyan-400/80">{s.label}</p>
-              <p className="mt-0.5 text-[10px] text-white/45">{s.sub}</p>
+        {/* Live stream */}
+        <div className="p-4 md:p-5">
+          <div className="overflow-hidden rounded-xl border border-white/[0.06] bg-[#040a14]/70">
+            <div className="border-b border-white/[0.05] px-3.5 py-2">
+              <p className="text-[9px] font-semibold tracking-[0.14em] text-white/40">ENGINE OUTPUT</p>
+            </div>
+            <div className="relative h-[120px] overflow-hidden">
+              <div style={reduce ? undefined : { animation: "log-scroll 14s linear infinite" }}>
+                {stream.map((row, i) => {
+                  const mod = ENGINE_MODULES.find((m) => m.id === row.module);
+                  return (
+                    <div
+                      key={`${row.module}-${i}`}
+                      className="flex items-center gap-2 border-b border-white/[0.03] px-3.5 py-2 font-mono text-[10px] last:border-0"
+                    >
+                      <span
+                        className="shrink-0 rounded px-1.5 py-0.5 text-[8px]"
+                        style={{
+                          color: mod?.color ?? "#fff",
+                          background: `${mod?.color ?? "#fff"}15`,
+                          border: `1px solid ${mod?.color ?? "#fff"}25`,
+                        }}
+                      >
+                        {row.module}
+                      </span>
+                      <span className="min-w-0 flex-1 truncate text-white/45">{row.msg}</span>
+                    </div>
+                  );
+                })}
+              </div>
               {!reduce && (
-                <div className="mt-2 h-0.5 overflow-hidden rounded-full bg-white/10">
-                  <div
-                    className="h-full w-1/2 rounded-full bg-gradient-to-r from-cyan-400/60 to-blue-400/60"
-                    style={{ animation: `status-flow 2.5s ease-in-out infinite`, animationDelay: `${i * 0.4}s` }}
-                  />
-                </div>
+                <div
+                  className="pointer-events-none absolute inset-x-0 top-0 h-6"
+                  style={{ background: "linear-gradient(180deg, #040a14 0%, transparent 100%)" }}
+                />
               )}
             </div>
-          ))}
+          </div>
+          {!reduce && (
+            <p className="mt-2.5 text-center text-[9px] tabular-nums text-white/25">
+              {(tick % 900) + 1200} content ops/h
+            </p>
+          )}
         </div>
       </div>
     </div>

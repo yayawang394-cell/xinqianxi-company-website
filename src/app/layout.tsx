@@ -15,16 +15,18 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.xinqianxi.world
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "杭州萧山新千西人工智能应用软件有限公司",
-    template: "%s · 杭州萧山新千西人工智能应用软件有限公司",
+    default: "新千西科技 · AI原生内容与数字资产创新",
+    template: "%s · 新千西科技",
   },
-  description: "AI应用开发、智能体、数字员工与自动化系统，让AI真正服务企业增长。",
-  keywords: ["新千西", "人工智能", "AI智能体", "数字员工", "AI自动化", "杭州萧山"],
+  description:
+    "新千西科技是一家 AI 原生内容与数字资产创新公司，专注 AI 内容生产、协同创作系统、AI 原生产品与数字资产探索。",
+  keywords: ["新千西科技", "AI原生内容", "数字资产创新", "协同创作", "多元宇宙叙事平台", "AI内容生产"],
   openGraph: {
-    title: "杭州萧山新千西人工智能应用软件有限公司",
-    description: "AI应用开发、智能体、数字员工与自动化系统，让AI真正服务企业增长。",
+    title: "新千西科技 · AI原生内容与数字资产创新",
+    description:
+      "AI 原生内容与数字资产创新公司。自研 AI 内容生产、协同创作与数字资产产品。",
     url: siteUrl,
-    siteName: "杭州萧山新千西人工智能应用软件有限公司",
+    siteName: "新千西科技",
     locale: "zh_CN",
     type: "website",
   },
